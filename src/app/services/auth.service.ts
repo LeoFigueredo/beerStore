@@ -1,17 +1,20 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs/internal/Observable';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { map } from 'rxjs/operators';
-// import { IsNullOrUndefined } from 'util';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor() {}
+  constructor(private afsAuth: AngularFireAuth) {}
   registerUser() {}
   loginEmailUser() {}
   loginFacebookUser() {}
   loginGoogleUser() {}
   logOutUser() {}
+
+  isAuth() {
+    return this.afsAuth.authState.pipe(map(auth => auth));
+  }
 }

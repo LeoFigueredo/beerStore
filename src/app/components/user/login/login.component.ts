@@ -20,7 +20,12 @@ onLoginGoogle() {
   this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
   this.router.navigate(['admin/list-beers']);
 }
+onLoginFacebook() {
+  this.afAuth.auth.signInWithPopup(new auth.FacebookAuthProvider());
+}
+
 onLogout() {
   this.afAuth.auth.signOut();
 }
+
 }
