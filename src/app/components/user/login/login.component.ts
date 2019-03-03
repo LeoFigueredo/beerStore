@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app';
-import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { Router } from '@angular/router';
-
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,20 +11,36 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  constructor( public afAuth: AngularFireAuth, private router: Router ) { }
-
+  constructor(public afAuth: AngularFireAuth, private router: Router, private authService: AuthService) { }
+  public email: string = '';
+  public password: string = '';
   ngOnInit() {
   }
-onLoginGoogle() {
-  this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
-  this.router.navigate(['admin/list-beers']);
-}
-onLoginFacebook() {
-  this.afAuth.auth.signInWithPopup(new auth.FacebookAuthProvider());
-}
 
-onLogout() {
-  this.afAuth.auth.signOut();
-}
+  onLogin(): void {
+    this.authService.loginEmailUser(this.email, this.password)
+      .then((res) => {
+        this.onLoginRedirect();
+      }).catch(err => console.log('err', err.message));
+  }
 
+  onLoginGoogle(): void {
+    this.authService.loginGoogleUser()
+      .then((res) => {
+        this.onLoginRedirect();
+      }).catch(err => console.log('err', err.message));
+  }
+  onLoginFacebook(): void {
+    this.authService.loginFacebookUser()
+      .then((res) => {
+        this.onLoginRedirect();
+      }).catch(err => console.log('err', err.message));
+  }
+
+  onLogout() {
+    this.authService.logoutUser();
+  }
+  onLoginRedirect(): void {
+    this.router.navigate(['admin/list-books']);
+  }
 }
